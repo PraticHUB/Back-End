@@ -16,32 +16,35 @@ import { Request, Response } from "express"; // Importando os tipos do Express
 // }
 
 // Função para buscar todos os usuários
-// export async function getUsersController(req: Request, res: Response) {
-//   try {
-//     const users = getUsersModel();
-//     res.json(users);
-//   } catch (err) {
-//     console.error("Erro ao buscar usuários:", err);
-//     res.status(500).send("Erro ao buscar usuários");
-//   }
-// }
-
-// Função para atualizar um usuário
-export async function updateUserController(req: Request, res: Response) {
+export async function getUsersController(req: Request, res: Response) {
   try {
-    const { id } = req.params;
-    const { name, email, password } = req.body;
-    const updatedUser = await updateUser(id, name, email, password);
-    if (updatedUser) {
-      res.json(updatedUser);
-    } else {
-      res.status(404).send("Usuário não encontrado");
-    }
+    const users = getUsersModel();
+    res.json(users);
   } catch (err) {
-    console.error("Erro ao atualizar usuário:", err);
-    res.status(500).send("Erro ao atualizar usuário");
+    console.error("Erro ao buscar usuários:", err);
+    res.status(500).send("Erro ao buscar usuários");
   }
 }
+
+function getUsersModel() {
+  throw new Error("Function not implemented.");
+}
+// Função para atualizar um usuário
+// export async function updateUserController(req: Request, res: Response) {
+//   try {
+//     const { id } = req.params;
+//     const { name, email, password } = req.body;
+//     const updatedUser = await updateUser(id, name, email, password);
+//     if (updatedUser) {
+//       res.json(updatedUser);
+//     } else {
+//       res.status(404).send("Usuário não encontrado");
+//     }
+//   } catch (err) {
+//     console.error("Erro ao atualizar usuário:", err);
+//     res.status(500).send("Erro ao atualizar usuário");
+//   }
+// }
 
 // Função para deletar um usuário
 // export async function deleteUserController(req: Request, res: Response) {

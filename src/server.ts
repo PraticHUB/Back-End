@@ -1,11 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-// import {
-//   createUser,
-//   getUsers,
-//   updateUser,
-//   deleteUser,
-// } from "./controllers/userController";
+import { getUsersController } from "./controllers/userController";
 
 import cors from "cors";
 
@@ -18,8 +13,8 @@ app.use(cors());
 //teste commit teste
 
 // Rotas de CRUD para usuários
+app.get("/users", getUsersController);
 // app.post("/users", userController.createUser);
-// app.get("/users", userController.getUsers);
 // app.put("/users/:id", userController.updateUser);
 // app.delete("/users/:id", userController.deleteUser);
 
