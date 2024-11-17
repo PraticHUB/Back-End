@@ -1,4 +1,4 @@
-import query from "../../db";
+import query from "../db";
 
 // Função para inserir um novo usuário
 const createUser = async (name: any, email: any, password: any) => {
