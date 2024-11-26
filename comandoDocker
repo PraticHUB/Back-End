@@ -1,0 +1,94 @@
+Para instalar e configurar o Docker com o banco de dados PostgreSQL no seu projeto praticHUB, siga este passo a passo. Vamos configurar o contêiner do PostgreSQL com o nome do banco de dados praticHUB e integrá-lo com seu código.
+
+1. Rodar o PostgreSQL no Docker com o nome praticHUB
+Passo 1: Criar e rodar o contêiner do PostgreSQL
+Execute o seguinte comando para criar e rodar o contêiner do PostgreSQL com o banco de dados praticHUB:
+
+bash
+Copiar código
+docker run --name pratichub-postgres -e POSTGRES_PASSWORD=root -e POSTGRES_DB=praticHUB -d -p 5432:5432 postgres:latest
+Explicação dos parâmetros:
+
+--name pratichub-postgres: Dá o nome ao contêiner de PostgreSQL como pratichub-postgres.
+-e POSTGRES_PASSWORD=root: Define a senha do usuário postgres. (Substitua root pela senha de sua escolha).
+-e POSTGRES_DB=praticHUB: Cria o banco de dados chamado praticHUB automaticamente quando o contêiner for iniciado.
+-d: Executa o contêiner em segundo plano.
+-p 5432:5432: Mapeia a porta 5432 do contêiner para a porta 5432 da máquina local.
+postgres:latest: Usa a versão mais recente da imagem oficial do PostgreSQL.
+Passo 2: Verificar se o contêiner está rodando
+Execute o comando abaixo para verificar se o contêiner foi criado e está em execução:
+
+bash
+Copiar código
+docker ps
+O contêiner pratichub-postgres deve aparecer na lista de contêineres em execução.
+
+2. Configuração do Código (Node.js + PostgreSQL)
+Agora, vamos ajustar o código para que ele se conecte ao banco de dados praticHUB que criamos no contêiner.
+
+Passo 1: Alterar as configurações de conexão no seu código
+Aqui está o código ajustado para se conectar ao banco de dados praticHUB usando o PostgreSQL:
+
+typescript
+Copiar código
+import { Pool } from "pg";
+
+// Conectar ao banco de dados PostgreSQL
+const pool = new Pool({
+  user: "postgres",           // Usuário do banco de dados
+  host: "127.0.0.1",          // O host local onde o PostgreSQL está rodando
+  database: "praticHUB",      // Nome do banco de dados
+  password: "root",           // Senha do usuário (definido no comando Docker)
+  port: 5432,                 // Porta do PostgreSQL
+});
+
+// Verificar a conexão
+const testConnection = async () => {
+  try {
+    await pool.connect(); // Tenta conectar ao banco
+    console.log("Conexão com o banco de dados praticHUB bem-sucedida!");
+  } catch (err) {
+    console.error("Erro ao conectar ao banco de dados", err);
+  }
+};
+
+// Chama a função para testar a conexão
+testConnection();
+
+// Método query corretamente utilizado
+const query = async (text: string, params?: any[]) => {
+  const result = await pool.query(text, params);
+  return result;
+};
+
+export default query;
+3. Testar a Conexão
+Para testar a conexão, basta executar o código. Se tudo estiver configurado corretamente, você verá o seguinte no console:
+
+Copiar código
+Conexão com o banco de dados praticHUB bem-sucedida!
+Se houver algum erro (por exemplo, se o contêiner do PostgreSQL não estiver em execução ou se as credenciais estiverem erradas), o erro será exibido no console.
+
+4. Persistência de Dados (Volume Docker)
+Se você deseja garantir que os dados do PostgreSQL não sejam perdidos ao remover o contêiner, pode adicionar um volume para persistência. Para isso, rode o contêiner com o volume configurado da seguinte forma:
+
+bash
+Copiar código
+docker run --name pratichub-postgres -e POSTGRES_PASSWORD=root -e POSTGRES_DB=praticHUB -d -p 5432:5432 -v pratichub-data:/var/lib/postgresql/data postgres:latest
+Isso criará um volume chamado pratichub-data para armazenar os dados do banco, garantindo que os dados não sejam apagados quando o contêiner for removido.
+
+5. Verificar as Imagens e Contêineres
+Listar as imagens Docker:
+
+bash
+Copiar código
+docker images
+Listar os contêineres Docker (inclusive os parados):
+
+bash
+Copiar código
+docker ps -a
+6. Finalizando
+Agora você tem um banco de dados PostgreSQL chamado praticHUB rodando em um contêiner Docker e integrado ao seu código Node.js. Esse setup pode ser usado para desenvolvimento local, onde o banco de dados é facilmente configurado, testado e removido conforme necessário.
+
+Se precisar de mais ajuda ou se tiver algum problema com a configuração, estou à disposição!

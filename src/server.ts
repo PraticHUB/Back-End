@@ -13,10 +13,7 @@ app.use(cors());
 //teste commit teste
 
 // Rotas de CRUD para usuários
-app.get("/users", getUsersController);
-// app.post("/users", userController.createUser);
-// app.put("/users/:id", userController.updateUser);
-// app.delete("/users/:id", userController.deleteUser);
+app.get("/login", getUsersController);
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
